@@ -1,0 +1,600 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ContactBusinessCardModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="address">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="address_type" Type="uniqueidentifier" />
+          <Property Name="street" Type="varchar" MaxLength="255" />
+          <Property Name="street_2" Type="varchar" MaxLength="255" />
+          <Property Name="state_id" Type="int" />
+          <Property Name="pincode" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="AddressType">
+          <Key>
+            <PropertyRef Name="AddressTypeID" />
+          </Key>
+          <Property Name="AddressTypeID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="country">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="code" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="organisation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="slogan_id" Type="int" />
+          <Property Name="address_id" Type="int" />
+          <Property Name="contact_no" Type="varchar" MaxLength="1" />
+          <Property Name="email" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="position">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="organisation_id" Type="int" />
+        </EntityType>
+        <EntityType Name="slogan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="message" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="state">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="country_id" Type="int" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="first_name" Type="varchar" MaxLength="255" />
+          <Property Name="last_name" Type="varchar" MaxLength="255" />
+          <Property Name="position_id" Type="int" />
+          <Property Name="organisation_id" Type="int" />
+          <Property Name="address_id" Type="int" />
+          <Property Name="mob_no" Type="varchar" MaxLength="255" />
+          <Property Name="alt_mob_no" Type="varchar" MaxLength="255" />
+          <Property Name="email" Type="varchar" MaxLength="255" />
+          <Property Name="isDeleted" Type="bit" />
+        </EntityType>
+        <Association Name="FK__address__address__32E0915F">
+          <End Role="AddressType" Type="Self.AddressType" Multiplicity="0..1" />
+          <End Role="address" Type="Self.address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AddressType">
+              <PropertyRef Name="AddressTypeID" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="address_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__address__state_i__398D8EEE">
+          <End Role="state" Type="Self.state" Multiplicity="0..1" />
+          <End Role="address" Type="Self.address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="state">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="state_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__organisat__addre__38996AB5">
+          <End Role="address" Type="Self.address" Multiplicity="0..1" />
+          <End Role="organisation" Type="Self.organisation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="address">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="organisation">
+              <PropertyRef Name="address_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__organisat__sloga__37A5467C">
+          <End Role="slogan" Type="Self.slogan" Multiplicity="0..1" />
+          <End Role="organisation" Type="Self.organisation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="slogan">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="organisation">
+              <PropertyRef Name="slogan_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__position__organi__36B12243">
+          <End Role="organisation" Type="Self.organisation" Multiplicity="0..1" />
+          <End Role="position" Type="Self.position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organisation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="position">
+              <PropertyRef Name="organisation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__state__country_i__3A81B327">
+          <End Role="country" Type="Self.country" Multiplicity="0..1" />
+          <End Role="state" Type="Self.state" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="state">
+              <PropertyRef Name="country_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user__address_id__5CD6CB2B">
+          <End Role="address" Type="Self.address" Multiplicity="0..1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="address">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="address_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user__organisati__5DCAEF64">
+          <End Role="organisation" Type="Self.organisation" Multiplicity="0..1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organisation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="organisation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user__position_i__5EBF139D">
+          <End Role="position" Type="Self.position" Multiplicity="0..1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="position">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="position_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ContactBusinessCardModelStoreContainer">
+          <EntitySet Name="address" EntityType="Self.address" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AddressType" EntityType="Self.AddressType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="country" EntityType="Self.country" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="organisation" EntityType="Self.organisation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="position" EntityType="Self.position" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="slogan" EntityType="Self.slogan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="state" EntityType="Self.state" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__address__address__32E0915F" Association="Self.FK__address__address__32E0915F">
+            <End Role="AddressType" EntitySet="AddressType" />
+            <End Role="address" EntitySet="address" />
+          </AssociationSet>
+          <AssociationSet Name="FK__address__state_i__398D8EEE" Association="Self.FK__address__state_i__398D8EEE">
+            <End Role="state" EntitySet="state" />
+            <End Role="address" EntitySet="address" />
+          </AssociationSet>
+          <AssociationSet Name="FK__organisat__addre__38996AB5" Association="Self.FK__organisat__addre__38996AB5">
+            <End Role="address" EntitySet="address" />
+            <End Role="organisation" EntitySet="organisation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__organisat__sloga__37A5467C" Association="Self.FK__organisat__sloga__37A5467C">
+            <End Role="slogan" EntitySet="slogan" />
+            <End Role="organisation" EntitySet="organisation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__position__organi__36B12243" Association="Self.FK__position__organi__36B12243">
+            <End Role="organisation" EntitySet="organisation" />
+            <End Role="position" EntitySet="position" />
+          </AssociationSet>
+          <AssociationSet Name="FK__state__country_i__3A81B327" Association="Self.FK__state__country_i__3A81B327">
+            <End Role="country" EntitySet="country" />
+            <End Role="state" EntitySet="state" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user__address_id__5CD6CB2B" Association="Self.FK__user__address_id__5CD6CB2B">
+            <End Role="address" EntitySet="address" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user__organisati__5DCAEF64" Association="Self.FK__user__organisati__5DCAEF64">
+            <End Role="organisation" EntitySet="organisation" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user__position_i__5EBF139D" Association="Self.FK__user__position_i__5EBF139D">
+            <End Role="position" EntitySet="position" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ContactBusinessCardModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="address">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="address_type" Type="Guid" />
+          <Property Name="street" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="street_2" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="state_id" Type="Int32" />
+          <Property Name="pincode" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AddressType" Relationship="Self.FK__address__address__32E0915F" FromRole="address" ToRole="AddressType" />
+          <NavigationProperty Name="state" Relationship="Self.FK__address__state_i__398D8EEE" FromRole="address" ToRole="state" />
+          <NavigationProperty Name="organisations" Relationship="Self.FK__organisat__addre__38996AB5" FromRole="address" ToRole="organisation" />
+          <NavigationProperty Name="users" Relationship="Self.FK__user__address_id__35BCFE0A" FromRole="address" ToRole="user" />
+        </EntityType>
+        <EntityType Name="AddressType">
+          <Key>
+            <PropertyRef Name="AddressTypeID" />
+          </Key>
+          <Property Name="AddressTypeID" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="addresses" Relationship="Self.FK__address__address__32E0915F" FromRole="AddressType" ToRole="address" />
+        </EntityType>
+        <EntityType Name="country">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="states" Relationship="Self.FK__state__country_i__3A81B327" FromRole="country" ToRole="state" />
+        </EntityType>
+        <EntityType Name="organisation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="slogan_id" Type="Int32" />
+          <Property Name="address_id" Type="Int32" />
+          <Property Name="contact_no" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="address" Relationship="Self.FK__organisat__addre__38996AB5" FromRole="organisation" ToRole="address" />
+          <NavigationProperty Name="slogan" Relationship="Self.FK__organisat__sloga__37A5467C" FromRole="organisation" ToRole="slogan" />
+          <NavigationProperty Name="positions" Relationship="Self.FK__position__organi__36B12243" FromRole="organisation" ToRole="position" />
+          <NavigationProperty Name="users" Relationship="Self.FK__user__organisati__34C8D9D1" FromRole="organisation" ToRole="user" />
+        </EntityType>
+        <EntityType Name="position">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="organisation_id" Type="Int32" />
+          <NavigationProperty Name="organisation" Relationship="Self.FK__position__organi__36B12243" FromRole="position" ToRole="organisation" />
+          <NavigationProperty Name="users" Relationship="Self.FK__user__position_i__33D4B598" FromRole="position" ToRole="user" />
+        </EntityType>
+        <EntityType Name="slogan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="message" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="organisations" Relationship="Self.FK__organisat__sloga__37A5467C" FromRole="slogan" ToRole="organisation" />
+        </EntityType>
+        <EntityType Name="state">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="country_id" Type="Int32" />
+          <NavigationProperty Name="addresses" Relationship="Self.FK__address__state_i__398D8EEE" FromRole="state" ToRole="address" />
+          <NavigationProperty Name="country" Relationship="Self.FK__state__country_i__3A81B327" FromRole="state" ToRole="country" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="first_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="last_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="position_id" Type="Int32" />
+          <Property Name="organisation_id" Type="Int32" />
+          <Property Name="address_id" Type="Int32" />
+          <Property Name="mob_no" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="alt_mob_no" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="isDeleted" Type="Boolean" />
+          <NavigationProperty Name="address" Relationship="Self.FK__user__address_id__35BCFE0A" FromRole="user" ToRole="address" />
+          <NavigationProperty Name="organisation" Relationship="Self.FK__user__organisati__34C8D9D1" FromRole="user" ToRole="organisation" />
+          <NavigationProperty Name="position" Relationship="Self.FK__user__position_i__33D4B598" FromRole="user" ToRole="position" />
+        </EntityType>
+        <Association Name="FK__address__address__32E0915F">
+          <End Role="AddressType" Type="Self.AddressType" Multiplicity="0..1" />
+          <End Role="address" Type="Self.address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AddressType">
+              <PropertyRef Name="AddressTypeID" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="address_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__address__state_i__398D8EEE">
+          <End Role="state" Type="Self.state" Multiplicity="0..1" />
+          <End Role="address" Type="Self.address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="state">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="state_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__organisat__addre__38996AB5">
+          <End Role="address" Type="Self.address" Multiplicity="0..1" />
+          <End Role="organisation" Type="Self.organisation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="address">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="organisation">
+              <PropertyRef Name="address_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user__address_id__35BCFE0A">
+          <End Role="address" Type="Self.address" Multiplicity="0..1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="address">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="address_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__state__country_i__3A81B327">
+          <End Role="country" Type="Self.country" Multiplicity="0..1" />
+          <End Role="state" Type="Self.state" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="state">
+              <PropertyRef Name="country_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__organisat__sloga__37A5467C">
+          <End Role="slogan" Type="Self.slogan" Multiplicity="0..1" />
+          <End Role="organisation" Type="Self.organisation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="slogan">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="organisation">
+              <PropertyRef Name="slogan_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__position__organi__36B12243">
+          <End Role="organisation" Type="Self.organisation" Multiplicity="0..1" />
+          <End Role="position" Type="Self.position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organisation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="position">
+              <PropertyRef Name="organisation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user__organisati__34C8D9D1">
+          <End Role="organisation" Type="Self.organisation" Multiplicity="0..1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organisation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="organisation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user__position_i__33D4B598">
+          <End Role="position" Type="Self.position" Multiplicity="0..1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="position">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="position_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ContactBusinessCardEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="addresses" EntityType="Self.address" />
+          <EntitySet Name="AddressTypes" EntityType="Self.AddressType" />
+          <EntitySet Name="countries" EntityType="Self.country" />
+          <EntitySet Name="organisations" EntityType="Self.organisation" />
+          <EntitySet Name="positions" EntityType="Self.position" />
+          <EntitySet Name="slogans" EntityType="Self.slogan" />
+          <EntitySet Name="states" EntityType="Self.state" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="FK__address__address__32E0915F" Association="Self.FK__address__address__32E0915F">
+            <End Role="AddressType" EntitySet="AddressTypes" />
+            <End Role="address" EntitySet="addresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__address__state_i__398D8EEE" Association="Self.FK__address__state_i__398D8EEE">
+            <End Role="state" EntitySet="states" />
+            <End Role="address" EntitySet="addresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__organisat__addre__38996AB5" Association="Self.FK__organisat__addre__38996AB5">
+            <End Role="address" EntitySet="addresses" />
+            <End Role="organisation" EntitySet="organisations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user__address_id__35BCFE0A" Association="Self.FK__user__address_id__35BCFE0A">
+            <End Role="address" EntitySet="addresses" />
+            <End Role="user" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK__state__country_i__3A81B327" Association="Self.FK__state__country_i__3A81B327">
+            <End Role="country" EntitySet="countries" />
+            <End Role="state" EntitySet="states" />
+          </AssociationSet>
+          <AssociationSet Name="FK__organisat__sloga__37A5467C" Association="Self.FK__organisat__sloga__37A5467C">
+            <End Role="slogan" EntitySet="slogans" />
+            <End Role="organisation" EntitySet="organisations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__position__organi__36B12243" Association="Self.FK__position__organi__36B12243">
+            <End Role="organisation" EntitySet="organisations" />
+            <End Role="position" EntitySet="positions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user__organisati__34C8D9D1" Association="Self.FK__user__organisati__34C8D9D1">
+            <End Role="organisation" EntitySet="organisations" />
+            <End Role="user" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user__position_i__33D4B598" Association="Self.FK__user__position_i__33D4B598">
+            <End Role="position" EntitySet="positions" />
+            <End Role="user" EntitySet="users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ContactBusinessCardModelStoreContainer" CdmEntityContainer="ContactBusinessCardEntities">
+          <EntitySetMapping Name="addresses">
+            <EntityTypeMapping TypeName="ContactBusinessCardModel.address">
+              <MappingFragment StoreEntitySet="address">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="address_type" ColumnName="address_type" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="street_2" ColumnName="street_2" />
+                <ScalarProperty Name="state_id" ColumnName="state_id" />
+                <ScalarProperty Name="pincode" ColumnName="pincode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AddressTypes">
+            <EntityTypeMapping TypeName="ContactBusinessCardModel.AddressType">
+              <MappingFragment StoreEntitySet="AddressType">
+                <ScalarProperty Name="AddressTypeID" ColumnName="AddressTypeID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="countries">
+            <EntityTypeMapping TypeName="ContactBusinessCardModel.country">
+              <MappingFragment StoreEntitySet="country">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="organisations">
+            <EntityTypeMapping TypeName="ContactBusinessCardModel.organisation">
+              <MappingFragment StoreEntitySet="organisation">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="slogan_id" ColumnName="slogan_id" />
+                <ScalarProperty Name="address_id" ColumnName="address_id" />
+                <ScalarProperty Name="contact_no" ColumnName="contact_no" />
+                <ScalarProperty Name="email" ColumnName="email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="positions">
+            <EntityTypeMapping TypeName="ContactBusinessCardModel.position">
+              <MappingFragment StoreEntitySet="position">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="organisation_id" ColumnName="organisation_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="slogans">
+            <EntityTypeMapping TypeName="ContactBusinessCardModel.slogan">
+              <MappingFragment StoreEntitySet="slogan">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="message" ColumnName="message" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="states">
+            <EntityTypeMapping TypeName="ContactBusinessCardModel.state">
+              <MappingFragment StoreEntitySet="state">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="country_id" ColumnName="country_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="ContactBusinessCardModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="position_id" ColumnName="position_id" />
+                <ScalarProperty Name="organisation_id" ColumnName="organisation_id" />
+                <ScalarProperty Name="address_id" ColumnName="address_id" />
+                <ScalarProperty Name="mob_no" ColumnName="mob_no" />
+                <ScalarProperty Name="alt_mob_no" ColumnName="alt_mob_no" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
